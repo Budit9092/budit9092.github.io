@@ -16,16 +16,17 @@
 body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
 
 /* ============ TOPBAR ============ */
-.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
-.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 24px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; gap:16px; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; white-space:nowrap; flex-shrink:0; }
 .topbar-back:hover { color:var(--gold); }
-.topbar-back svg { width:20px; height:20px; }
-.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
-.topbar-step { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--gray); }
-.topbar-step-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); }
-.topbar-user { display:flex; align-items:center; gap:10px; text-decoration:none; }
-.topbar-user-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
-.topbar-user-name { font-size:13px; font-weight:600; color:var(--white); }
+.topbar-back svg { width:20px; height:20px; flex-shrink:0; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; text-align:center; white-space:nowrap; }
+.topbar-right { display:flex; align-items:center; gap:14px; flex-shrink:0; }
+.topbar-step { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--gray); white-space:nowrap; }
+.topbar-step-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.topbar-user { display:flex; align-items:center; gap:8px; text-decoration:none; flex-shrink:0; }
+.topbar-user-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0; }
+.topbar-user-name { font-size:13px; font-weight:600; color:var(--white); white-space:nowrap; }
 
 /* ============ FORM CONTAINER ============ */
 .form-container { max-width:680px; margin:0 auto; padding:40px 24px 120px; }
@@ -86,7 +87,13 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 @media (max-width:640px) {
   .form-row { grid-template-columns:1fr; }
   .theme-selector { grid-template-columns:1fr; }
-  .topbar { padding:16px 20px; }
+  .topbar { padding:14px 16px; gap:10px; }
+  .topbar-title { font-size:16px; }
+  .topbar-back { font-size:13px; gap:6px; }
+  .topbar-back svg { width:18px; height:18px; }
+  .topbar-step { font-size:11px; gap:6px; }
+  .topbar-user-name { display:none; }
+  .topbar-user-avatar { width:28px; height:28px; }
   .form-container { padding:24px 20px 100px; }
 }
 </style>
@@ -105,9 +112,11 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
     Dashboard
   </a>
   <div class="topbar-title">Buat Undangan</div>
-  <div class="topbar-step">
-    <div class="topbar-step-dot"></div>
-    <span id="stepIndicator">Langkah 1 dari 3</span>
+  <div class="topbar-right" id="topbarRight">
+    <div class="topbar-step">
+      <div class="topbar-step-dot"></div>
+      <span id="stepIndicator">Langkah 1 dari 3</span>
+    </div>
   </div>
 </div>
 
@@ -312,14 +321,13 @@ function checkAuth() {
   }
   // Update topbar with user info
   const u = JSON.parse(user);
-  const topbar = document.querySelector('.topbar');
-  const stepEl = document.querySelector('.topbar-step');
-  if (topbar && stepEl) {
+  const topbarRight = document.getElementById('topbarRight');
+  if (topbarRight) {
     const userEl = document.createElement('a');
     userEl.href = 'settings.html';
     userEl.className = 'topbar-user';
     userEl.innerHTML = `<img src="${u.avatar}" alt="${u.name}" class="topbar-user-avatar"><span class="topbar-user-name">${u.name.split(' ')[0]}</span>`;
-    topbar.insertBefore(userEl, stepEl);
+    topbarRight.insertBefore(userEl, topbarRight.firstChild);
   }
 }
 checkAuth();
